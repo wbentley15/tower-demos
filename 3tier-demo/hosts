@@ -1,0 +1,8 @@
+[tomcat-servers]
+web01
+
+[jboss-servers]
+app01
+
+[mysql-servers]
+db01

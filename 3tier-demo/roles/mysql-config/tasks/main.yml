@@ -1,0 +1,17 @@
+---
+
+- name: Prep MySQL db
+  command: chdir=/usr/bin mysql_install_db
+  
+- name: Copy the prep script
+  copy: src=mysql_secure.sql dest=/usr/share mode=0755
+
+- name: Set MySQL db password
+  command: chdir=/usr/bin mysqladmin -u root --password=passwd password 'passwd'
+
+- name: Secure MySQL install
+  shell: chdir=/usr/bin mysql -u root --password=passwd < /usr/share/mysql_secure.sql
+
+- name: Enable MySQL to be started at boot
+  service: name=mysql enabled=yes state=started
+  notify: restart mysql

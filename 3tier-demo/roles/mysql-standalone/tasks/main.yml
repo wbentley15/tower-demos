@@ -1,0 +1,27 @@
+---
+- name: Install MySQL
+  yum: name={{item}} state=present
+  with_items:
+   - libselinux-python
+   - mysql
+   - mysql-server
+   - MySQL-python
+
+- name: Copying my.cnf configuration file
+  template: src=cust_my.cnf dest=/etc/my.cnf mode=0755
+
+- name: Prep MySQL db
+  command: chdir=/usr/bin mysql_install_db
+
+- name: Enable MySQL to be started at boot
+  service: name=mysqld enabled=yes state=restarted
+  
+- name: Copy the prep script
+  copy: src=mysql_secure.sql dest=/usr/share mode=0755
+
+- name: Prep MySQL db
+  command: chdir=/usr/bin mysqladmin -u root password 'passwd'
+
+- name: Secure MySQL install
+  shell: chdir=/usr/bin mysql -u root --password=passwd < /usr/share/mysql_secure.sql
+

@@ -1,0 +1,25 @@
+---
+# This playbook deploys a simple standalone JBoss server. 
+
+- hosts: tomcat-servers 
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - selinux
+    - tomcat
+    
+- hosts: jboss-servers 
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - jboss-standalone
+
+- hosts: mysql-servers
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - mysql-standalone
+    - mysql-config
